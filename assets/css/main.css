@@ -1,0 +1,22 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+
+  --color-darkBgStart: #020817;
+  --color-darkBgEnd: #071330;
+
+  --color-lightBgEnd: #5c92b5;
+  --color-lightBgStart: #e3f4ff;
+
+  --color-darkText: #ffffff;
+  --color-lightText: #000000;
+
+  --color-darkSecondary: #0d1828;
+  --color-lightSecondary: #54a799;
+  --color-darkButton: black;
+}
+:root {
+  --purpleShadow: 0 4px 14px rgba(128, 0, 255, 0.5);
+  --cyanShadow: 0 4px 14px rgba(94, 206, 220, 0.5);
+}
