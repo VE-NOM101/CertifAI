@@ -1,5 +1,5 @@
 <template>
-  <div class="relative dark:bg-bgBlack bg-bgWhite min-h-screen overflow-hidden">
+  <div class="relative dark:bg-bgBlack bg-bgWhite min-h-screen overflow-hidden font-montagu">
     <!-- Glow Effects -->
     <div
       class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1/2 bg-gradient-to-b from-darkBgStart to-transparent opacity-20 blur-2xl pointer-events-none z-0">
@@ -14,11 +14,10 @@
       <header
         class="sticky top-0 z-50 backdrop-blur bg-white/30 dark:bg-black/30 border-b border-gray-200 dark:border-gray-800">
         <UContainer>
-          <nav class="flex justify-between items-center py-4">
+          <nav class="flex justify-between items-center py-2">
             <!-- Logo -->
-            <NuxtLink to="/" class="text-xl font-bold text-primary flex items-center gap-2">
-              <UIcon name="i-fluent-emoji-graduation-cap" class="size-8" />
-              CertifAI
+            <NuxtLink to="/" class="text-xl font-bold flex items-center gap-2 text-lightRed">
+              <h1 class="md:text-4xl text-2xl text-lightRed font-monoton">CertifAI</h1>
             </NuxtLink>
 
             <!-- Desktop Nav -->
@@ -29,10 +28,10 @@
             <!-- Theme & Wallet (Desktop) -->
             <div class="hidden md:flex gap-3 items-center">
               <ClientOnly v-if="!colorMode?.forced">
-                <UButton :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'" color="neutral" variant="ghost"
+                <UButton class="text-deepBlue dark:text-gold" :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'" color="neutral" variant="ghost"
                   @click="isDark = !isDark" />
               </ClientOnly>
-              <UButton color="primary" variant="solid" size="sm" @click="connectWallet">
+              <UButton class="bg-darkRed hover:bg-lightRed hover:shadow-(--goldShadow) hover:scale-110 transition-all duration-300 text-white" variant="solid" size="lg" @click="connectWallet">
                 Connect Wallet
               </UButton>
             </div>
@@ -55,7 +54,7 @@
       <!-- Footer -->
       <footer class="backdrop-blur bg-white/30 dark:bg-black/30 py-6 border-t border-darkBgEnd/20">
         <UContainer class="text-center text-sm">
-          © {{ new Date().getFullYear() }} CredVerify. All rights reserved.
+          © {{ new Date().getFullYear() }} CertifAI. All rights reserved.
         </UContainer>
       </footer>
     </div>
@@ -76,7 +75,7 @@
           <div
             class=" justify-center items-center border-t border-gray-200 dark:border-gray-700 pt-4 mt-4 flex flex-col gap-2">
             <ClientOnly v-if="!colorMode?.forced">
-              <UButton :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'" color="neutral" variant="ghost"
+              <UButton class="text-deepBlue dark:text-gold" :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'" color="neutral" variant="ghost"
                 @click="isDark = !isDark" />
             </ClientOnly>
             <UButton class="flex justify-center items-center w-full" color="primary" variant="solid" size="sm"
@@ -108,7 +107,7 @@ function connectWallet() {
   alert('Connect Wallet clicked!')
 }
 
-const navlink = ref([{ name: 'Assbout', link: 'about' }, { name: 'Explore', link: 'explore' }, { name: 'Institutes', link: 'institutes' }]);
+const navlink = ref([{ name: 'About', link: 'about' }, { name: 'Explore', link: 'explore' }, { name: 'Institutes', link: 'institutes' }]);
 
 </script>
 

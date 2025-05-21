@@ -1,16 +1,27 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
-
 @theme {
+  /* 'deep-blue': '',
+      'dark-red': '', */
 
-  /* 'deep-blue': '#002d5c',
-      'dark-red': '#5a1300', */
-      
+  --font-monoton: "Monoton", sans-serif;
+  --font-berkShire: "Berkshire Swash", serif;
+  --font-exo: "Exo 2", sans-serif;
+  --font-underdog: "Underdog", system-ui;
+  --font-silkScreen: "Silkscreen", sans-serif;
+  --font-montagu: "Montagu Slab", serif;
+
   --color-darkBgStart: #0099ff;
   --color-darkBgEnd: #ff6a00;
 
-  --color-bgWhite:#f9f9fb;
-  --color-bgBlack:#00000f;
+  --color-deepBlue: #002d5c;
+  --color-darkRed: #5a1300;
+  --color-lightRed: #af0102;
+
+  --color-gold: #ffd700;
+
+  --color-bgWhite: #f9f9fb;
+  --color-bgBlack: #00000f;
 
   --color-lightBgEnd: #5c92b5;
   --color-lightBgStart: #e3f4ff;
@@ -23,6 +34,9 @@
   --color-darkButton: black;
 }
 :root {
-  --purpleShadow: 0 4px 14px rgba(128, 0, 255, 0.5);
+  --goldShadow: 0 4px 14px rgba(255, 200, 0, 0.5);
   --cyanShadow: 0 4px 14px rgba(94, 206, 220, 0.5);
+
+  --goldTextShadow: 0 0 8px #ffd700;
+  --redTextShadow: 0 0 8px #af0102;
 }
