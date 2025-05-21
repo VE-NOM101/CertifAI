@@ -17,7 +17,7 @@
           <nav class="flex justify-between items-center py-2">
             <!-- Logo -->
             <NuxtLink to="/" class="text-xl font-bold flex items-center gap-2 text-lightRed">
-              <h1 class="md:text-4xl text-2xl text-lightRed font-monoton">CertifAI</h1>
+              <h1 class="md:text-2xl text-xl text-lightRed font-monoton">CertifAI</h1>
             </NuxtLink>
 
             <!-- Desktop Nav -->
