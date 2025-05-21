@@ -1,7 +1,9 @@
 <template>
-  <section class="relative w-full h-[60vh] overflow-hidden text-white m-0 p-0">
+  <section class="relative w-full h-[70vh] overflow-hidden text-white m-0 p-0">
     <!-- Background Video -->
-    <video
+     <!-- Intially off- Please turn on while deploying -->
+      
+    <!-- <video
       autoplay
       muted
       loop
@@ -10,7 +12,7 @@
     >
       <source src="../../public/videos/heroVideo.mp4" type="video/mp4" />
       Your browser does not support the video tag.
-    </video>
+    </video> -->
 
     <!-- Dark overlay for readability -->
     <div class="absolute inset-0 bg-black/60 z-10"></div>
