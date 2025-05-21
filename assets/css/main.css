@@ -3,8 +3,14 @@
 
 @theme {
 
-  --color-darkBgStart: #020817;
-  --color-darkBgEnd: #071330;
+  /* 'deep-blue': '#002d5c',
+      'dark-red': '#5a1300', */
+      
+  --color-darkBgStart: #0099ff;
+  --color-darkBgEnd: #ff6a00;
+
+  --color-bgWhite:#f9f9fb;
+  --color-bgBlack:#00000f;
 
   --color-lightBgEnd: #5c92b5;
   --color-lightBgStart: #e3f4ff;
