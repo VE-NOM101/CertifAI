@@ -28,11 +28,16 @@
             <!-- Theme & Wallet (Desktop) -->
             <div class="hidden md:flex gap-3 items-center">
               <ClientOnly v-if="!colorMode?.forced">
-                <UButton class="text-deepBlue dark:text-gold" :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'" color="neutral" variant="ghost"
-                  @click="isDark = !isDark" />
+                <UButton class="text-deepBlue dark:text-gold" :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
+                  color="neutral" variant="ghost" @click="isDark = !isDark" />
               </ClientOnly>
-              <UButton class="bg-darkRed hover:bg-lightRed hover:shadow-(--goldShadow) hover:scale-110 transition-all duration-300 text-white" variant="solid" size="lg" @click="connectWallet">
-                Connect Wallet
+              <UButton
+                class="bg-darkRed hover:bg-lightRed hover:shadow-(--goldShadow) hover:scale-110 transition-all duration-300 text-white"
+                variant="solid" size="lg" @click="connect">
+                <div v-if="account.address == null">Connect Wallet</div>
+                <div v-else>{{ formattedAddress }} <UBadge class="text-black" icon="i-ri-eth-line" size="md" color="gold"
+                    variant="solid">{{formattedBalance}} ETH</UBadge>
+                </div>
               </UButton>
             </div>
 
@@ -75,11 +80,11 @@
           <div
             class=" justify-center items-center border-t border-gray-200 dark:border-gray-700 pt-4 mt-4 flex flex-col gap-2">
             <ClientOnly v-if="!colorMode?.forced">
-              <UButton class="text-deepBlue dark:text-gold" :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'" color="neutral" variant="ghost"
-                @click="isDark = !isDark" />
+              <UButton class="text-deepBlue dark:text-gold" :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
+                color="neutral" variant="ghost" @click="isDark = !isDark" />
             </ClientOnly>
             <UButton class="flex justify-center items-center w-full" color="primary" variant="solid" size="sm"
-              @click="connectWallet">
+              @click="connect">
               Connect Wallet
             </UButton>
           </div>
@@ -90,6 +95,7 @@
 </template>
 
 <script setup>
+import { ethers } from 'ethers'
 const colorMode = useColorMode()
 
 const isDark = computed({
@@ -101,11 +107,31 @@ const isDark = computed({
   }
 })
 
+const account = ref({ address: null, balance: null })
+
 const mobileMenuOpen = ref(false)
 
-function connectWallet() {
-  alert('Connect Wallet clicked!')
+const user = useUser()
+
+async function connect() {
+  const response = await connectWallet();
+  if (response) {
+    account.value.address = response.address;
+    account.value.balance = response.balance;
+    user.setUserAddress(response.address);
+  }
 }
+
+const formattedBalance = computed(() => {
+  if (!account.value.balance) return '0.0000'; // fallback
+  return `${ethers.formatEther(account.value.balance).slice(0, 4)}`;
+});
+
+const formattedAddress = computed(() => {
+  if (!account.value.address) return ''; // fallback
+  return `${account.value.address.slice(0, 6)}...${account.value.address.slice(-4)}`;
+});
+
 
 const navlink = ref([{ name: 'About', link: 'about' }, { name: 'Explore', link: 'explore' }, { name: 'Institutes', link: 'institutes' }]);
 
