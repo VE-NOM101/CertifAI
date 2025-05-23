@@ -25,10 +25,13 @@
       <p class="text-lg sm:text-xl text-gray-200 mb-6 max-w-2xl">
         Next-Gen Academic Verification on the Blockchain
       </p>
-      <UButton to="/dashboard" class="bg-lightRed text-white hover:bg-gold hover:translate-y-1.5 transition-all duration-400" size="lg">
+      <UButton loading-icon="i-lucide-loader" to="/dashboard"
+        class="bg-lightRed text-white hover:bg-gold hover:translate-y-1.5 transition-all duration-400" size="lg">
         Get Started
         <UIcon name="i-picon-down" />
       </UButton>
     </div>
   </section>
 </template>
+<script setup>
+</script>

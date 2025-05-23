@@ -1,13 +1,14 @@
 <template>
   <div>
-    super
+    Super
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 
+definePageMeta({
+  middleware: ['super'],
+});
 </script>
 
-<style>
-
-</style>
+<style></style>

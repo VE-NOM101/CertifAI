@@ -1,6 +1,9 @@
 <template>
     <div>
-        <HomePageHero/>
+        <HomePageHero />
     </div>
-    
-</template> 
+
+</template>
+
+<script setup>
+</script>

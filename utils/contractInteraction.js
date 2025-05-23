@@ -1,20 +1,15 @@
-import { ethers } from 'ethers'
-import CertifAI_ABI from "contracts/ABI/CertifAI_ABI.json";
-import Institute_ABI from "contracts/ABI/Institute_ABI.json";
+import { ethers } from "ethers";
+import CertifAI_ABI from "../contracts/ABI/CertifAI_ABI.json";
+import Institute_ABI from "../contracts/ABI/Institute_ABI.json";
 
 const { ethereum } = window;
 export class CertifAI {
-  browserProvider = null;
   testnetProvider = null;
   ContractData = null;
   contractAddress = "";
-  constructor() {
-    this.browserProvider = new ethers.BrowserProvider(ethereum);
-
-    this.testnetProvider = new ethers.JsonRpcProvider(
-      import.meta.env.NUXT_ALCHEMY_RPC_URL
-    );
-    this.contractAddress = import.meta.env.NUXT_CERTIFAI_CONTRACT;
+  constructor(rpcURL, contractAddress) {
+    this.testnetProvider = new ethers.JsonRpcProvider(rpcURL);
+    this.contractAddress = contractAddress;
     //getting data from the contract,
     this.ContractData = new ethers.Contract(
       this.contractAddress,
@@ -24,7 +19,12 @@ export class CertifAI {
   }
 
   async getSuperAdmin() {
-    const superAdminAddress = await this.ContractData.superAdmin();
-    return superAdminAddress;
+    try {
+      const superAdminAddress = await this.ContractData.superAdmin();
+      return { address: superAdminAddress, status: true };
+    } catch (error) {
+      console.log(error);
+      return { status: false };
+    }
   }
 }

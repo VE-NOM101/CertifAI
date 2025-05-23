@@ -31,12 +31,13 @@
                 <UButton class="text-deepBlue dark:text-gold" :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
                   color="neutral" variant="ghost" @click="isDark = !isDark" />
               </ClientOnly>
-              <UButton
+              <UButton :loading="isConnecting" :label="isConnecting ? 'Connecting...' : 'Connect Wallet'"
+                :disabled="isConnecting" @click="connect"
                 class="bg-darkRed hover:bg-lightRed hover:shadow-(--goldShadow) hover:scale-110 transition-all duration-300 text-white"
-                variant="solid" size="lg" @click="connect">
+                variant="solid" size="lg">
                 <div v-if="account.address == null">Connect Wallet</div>
-                <div v-else>{{ formattedAddress }} <UBadge class="text-black" icon="i-ri-eth-line" size="md" color="gold"
-                    variant="solid">{{formattedBalance}} ETH</UBadge>
+                <div v-else>{{ formattedAddress }} <UBadge class="text-black" icon="i-ri-eth-line" size="md"
+                    color="gold" variant="solid">{{ account.balance }} ETH</UBadge>
                 </div>
               </UButton>
             </div>
@@ -83,19 +84,27 @@
               <UButton class="text-deepBlue dark:text-gold" :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
                 color="neutral" variant="ghost" @click="isDark = !isDark" />
             </ClientOnly>
-            <UButton class="flex justify-center items-center w-full" color="primary" variant="solid" size="sm"
-              @click="connect">
-              Connect Wallet
-            </UButton>
+             <UButton :loading="isConnecting" :label="isConnecting ? 'Connecting...' : 'Connect Wallet'"
+                :disabled="isConnecting" @click="connect"
+                class="bg-darkRed hover:bg-lightRed hover:shadow-(--goldShadow) hover:scale-110 transition-all duration-300 text-white"
+                variant="solid" size="lg">
+                <div v-if="account.address == null">Connect Wallet</div>
+                <div v-else>{{ formattedAddress }} <UBadge class="text-black" icon="i-ri-eth-line" size="md"
+                    color="gold" variant="solid">{{ account.balance }} ETH</UBadge>
+                </div>
+              </UButton>
           </div>
         </div>
       </div>
     </transition>
   </div>
+
 </template>
 
 <script setup>
-import { ethers } from 'ethers'
+
+const toast = useToast();
+const user = useUser();
 const colorMode = useColorMode()
 
 const isDark = computed({
@@ -107,34 +116,55 @@ const isDark = computed({
   }
 })
 
-const account = ref({ address: null, balance: null })
+const account = ref({
+  address: user.userAddress,
+  balance: user.userBalance,
+})
+
 
 const mobileMenuOpen = ref(false)
 
-const user = useUser()
+
+const navlink = ref([{ name: 'About', link: 'about' }, { name: 'Explore', link: 'explore' }, { name: 'Institutes', link: 'institutes' }]);
+
+//Handle metamask connection
+const isConnecting = ref(false)
+const router = useRouter()
 
 async function connect() {
-  const response = await connectWallet();
-  if (response) {
-    account.value.address = response.address;
-    account.value.balance = response.balance;
-    user.setUserAddress(response.address);
+  isConnecting.value = true;
+
+  try {
+    const response = await connectWallet();
+
+    if (response.status) {
+      user.setUserAddress(response.address);
+      user.setUserBalance(response.balance);
+      account.value.address = response.address;
+      account.value.balance = response.balance;
+      // ✅ Navigate to dashboard
+      router.push('/dashboard');
+    } else {
+      toast.add({ title: response.message, color: 'error', icon: 'si:error-line' });
+    }
+  } catch (err) {
+    toast.add({ title: response.message, color: 'error', icon: 'si:error-line' });
+  } finally {
+    isConnecting.value = false;
   }
 }
-
-const formattedBalance = computed(() => {
-  if (!account.value.balance) return '0.0000'; // fallback
-  return `${ethers.formatEther(account.value.balance).slice(0, 4)}`;
-});
 
 const formattedAddress = computed(() => {
   if (!account.value.address) return ''; // fallback
   return `${account.value.address.slice(0, 6)}...${account.value.address.slice(-4)}`;
 });
 
-
-const navlink = ref([{ name: 'About', link: 'about' }, { name: 'Explore', link: 'explore' }, { name: 'Institutes', link: 'institutes' }]);
-
+onMounted(async () => {
+  ethereum.on("accountsChanged", async () => {
+    await connect();
+  });
+  //await connect();
+});
 </script>
 
 <style>

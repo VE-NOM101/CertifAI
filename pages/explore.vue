@@ -1,3 +1,3 @@
 <template>
-    Template
+    
 </template>
