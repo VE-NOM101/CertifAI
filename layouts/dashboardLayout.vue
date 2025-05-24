@@ -65,7 +65,7 @@
       </header>
 
       <!-- Main Content -->
-      <main class="flex-grow py-4">
+      <main class="flex-grow py-1">
         <UContainer>
           <slot />
         </UContainer>
