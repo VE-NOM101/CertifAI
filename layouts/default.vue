@@ -84,15 +84,15 @@
               <UButton class="text-deepBlue dark:text-gold" :icon="isDark ? 'i-lucide-moon' : 'i-lucide-sun'"
                 color="neutral" variant="ghost" @click="isDark = !isDark" />
             </ClientOnly>
-             <UButton :loading="isConnecting" :label="isConnecting ? 'Connecting...' : 'Connect Wallet'"
-                :disabled="isConnecting" @click="connect"
-                class="bg-darkRed hover:bg-lightRed hover:shadow-(--goldShadow) hover:scale-110 transition-all duration-300 text-white"
-                variant="solid" size="lg">
-                <div v-if="account.address == null">Connect Wallet</div>
-                <div v-else>{{ formattedAddress }} <UBadge class="text-black" icon="i-ri-eth-line" size="md"
-                    color="gold" variant="solid">{{ account.balance }} ETH</UBadge>
-                </div>
-              </UButton>
+            <UButton :loading="isConnecting" :label="isConnecting ? 'Connecting...' : 'Connect Wallet'"
+              :disabled="isConnecting" @click="connect"
+              class="bg-darkRed hover:bg-lightRed hover:shadow-(--goldShadow) hover:scale-110 transition-all duration-300 text-white"
+              variant="solid" size="lg">
+              <div v-if="account.address == null">Connect Wallet</div>
+              <div v-else>{{ formattedAddress }} <UBadge class="text-black" icon="i-ri-eth-line" size="md" color="gold"
+                  variant="solid">{{ account.balance }} ETH</UBadge>
+              </div>
+            </UButton>
           </div>
         </div>
       </div>
@@ -106,6 +106,7 @@
 const toast = useToast();
 const user = useUser();
 const colorMode = useColorMode()
+const { ethereum } = window;
 
 const isDark = computed({
   get() {
@@ -142,6 +143,21 @@ async function connect() {
       user.setUserBalance(response.balance);
       account.value.address = response.address;
       account.value.balance = response.balance;
+      //SuperAdmin and issuer data
+      const config = useRuntimeConfig();
+      const contract = new CertifAI(
+        config.public.alchemyRpcUrl,
+        config.public.certifaiContract
+      );
+
+      const superAdmin = await contract.getSuperAdmin();
+      const isIssuer = await contract.isIssuer(response.address);
+      const isSuperAdmin =
+        superAdmin.toLowerCase() === response.address.toLowerCase();
+
+      user.setSuperAdmin(isSuperAdmin);
+      user.setIsIssuer(isIssuer);
+
       // ✅ Navigate to dashboard
       router.push('/dashboard');
     } else {

@@ -1,9 +1,7 @@
 <template>
-    <div></div>
+    <div>
+    Hhehe
+    </div>
 </template>
 <script setup>
-
-
-
-
 </script>

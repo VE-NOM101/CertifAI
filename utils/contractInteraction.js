@@ -20,11 +20,18 @@ export class CertifAI {
 
   async getSuperAdmin() {
     try {
-      const superAdminAddress = await this.ContractData.superAdmin();
-      return { address: superAdminAddress, status: true };
+      const response = await this.ContractData.superAdmin();
+      return response;
     } catch (error) {
       console.log(error);
-      return { status: false };
+    }
+  }
+  async isIssuer(address) {
+    try {
+      const response = await this.ContractData.isIssuer(address);
+      return response;
+    } catch (error) {
+      console.log(error);
     }
   }
 }
