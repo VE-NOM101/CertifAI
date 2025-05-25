@@ -34,4 +34,79 @@ export class CertifAI {
       console.log(error);
     }
   }
+
+  async getValidationFee() {
+    try {
+      const response = await this.ContractData.validationFee();
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async updateValidationFee(newVal) {
+    try {
+      const browserProvider = new ethers.BrowserProvider(ethereum);
+      const signer = await browserProvider.getSigner();
+      const contractInstance = new ethers.Contract(
+        this.contractAddress,
+        CertifAI_ABI,
+        signer
+      );
+      const tx = await contractInstance.updateValidationFee(
+        ethers.parseEther(newVal.toString())
+      );
+      console.log("⏳ Transaction sent:", tx.hash);
+      return { status: true };
+    } catch (error) {
+      console.log(error);
+      return { status: false };
+    }
+  }
+
+  async addIssuer(address) {
+    try {
+      const browserProvider = new ethers.BrowserProvider(ethereum);
+      const signer = await browserProvider.getSigner();
+      const contractInstance = new ethers.Contract(
+        this.contractAddress,
+        CertifAI_ABI,
+        signer
+      );
+      const tx = await contractInstance.addIssuer(address);
+      console.log("⏳ Transaction sent:", tx.hash);
+      return { status: true };
+    } catch (error) {
+      console.log(error);
+      return { status: false, message: error.message };
+    }
+  }
+
+  async getAllIssuers() {
+    try {
+      const response = await this.ContractData.getAllIssuers();
+      return response;
+    } catch (error) {
+      console.error("Error fetching issuers:", error);
+      return [];
+    }
+  }
+
+  async removeIssuer(address) {
+    try {
+      const browserProvider = new ethers.BrowserProvider(ethereum);
+      const signer = await browserProvider.getSigner();
+      const contractInstance = new ethers.Contract(
+        this.contractAddress,
+        CertifAI_ABI,
+        signer
+      );
+      const tx = await contractInstance.removeIssuer(address);
+      console.log("⏳ Transaction sent:", tx.hash);
+      return { status: true };
+    } catch (error) {
+      console.log(error);
+      return { status: false, message: error.message };
+    }
+  }
 }

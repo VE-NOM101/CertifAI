@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Joi from 'joi'
 import type { FormSubmitEvent } from '@nuxt/ui'
+import { ethers } from 'ethers'
 
 const schema = Joi.object({
   fee: Joi.number()
@@ -14,16 +15,51 @@ const state = reactive({
 })
 
 const toast = useToast()
+const contract = useContract();
+const rpc = contract.getContractInstance();
+const isUpdating = ref(false);
 
 async function onSubmit(payload: FormSubmitEvent<unknown>) {
   const event = payload as FormSubmitEvent<{ fee: number }>
-  toast.add({
-    title: 'Success',
-    description: `Validation fee submitted: ${event.data.fee} ETH`,
-    color: 'success'
-  })
-  console.log(event.data)
+
+  try {
+    isUpdating.value = true;
+    const response = await rpc.updateValidationFee(event.data.fee);
+    isUpdating.value = false;
+    if (response.status) {
+      await getValidationFee();
+      toast.add({
+        title: 'Success',
+        description: `Validation fee updated`,
+        color: 'success'
+      });
+    } else {
+      toast.add({
+        title: 'Error',
+        description: `Validation fee can't be updated.`,
+        color: 'error'
+      });
+    }
+  } catch (error) {
+    toast.add({
+      title: 'Error',
+      description: `Something gone wrong.`,
+      color: 'error'
+    });
+  }
 }
+
+
+async function getValidationFee() {
+
+  const response = await rpc.getValidationFee();
+  const fee = ethers.formatEther(response);
+  state.fee = parseFloat(fee);
+}
+
+onMounted(async () => {
+  await getValidationFee();
+})
 </script>
 
 <template>
@@ -35,7 +71,7 @@ async function onSubmit(payload: FormSubmitEvent<unknown>) {
       </UFormField>
 
       <div class="flex justify-end">
-        <UButton type="submit">Update</UButton>
+        <UButton :loading="isUpdating" loading-icon="hugeicons:reload" color="warning" type="submit">Update</UButton>
       </div>
     </UForm>
   </div>

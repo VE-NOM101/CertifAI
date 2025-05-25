@@ -105,6 +105,7 @@
 
 const toast = useToast();
 const user = useUser();
+const contract = useContract();
 const colorMode = useColorMode()
 const { ethereum } = window;
 
@@ -144,14 +145,14 @@ async function connect() {
       account.value.address = response.address;
       account.value.balance = response.balance;
       //SuperAdmin and issuer data
-      const config = useRuntimeConfig();
-      const contract = new CertifAI(
-        config.public.alchemyRpcUrl,
-        config.public.certifaiContract
-      );
-
-      const superAdmin = await contract.getSuperAdmin();
-      const isIssuer = await contract.isIssuer(response.address);
+      // const config = useRuntimeConfig();
+      // const contract = new CertifAI(
+      //   config.public.alchemyRpcUrl,
+      //   config.public.certifaiContract
+      // );
+      const rpc = contract.getContractInstance();
+      const superAdmin = await rpc.getSuperAdmin();
+      const isIssuer = await rpc.isIssuer(response.address);
       const isSuperAdmin =
         superAdmin.toLowerCase() === response.address.toLowerCase();
 

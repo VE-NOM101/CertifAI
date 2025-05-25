@@ -16,8 +16,9 @@ contract CertifAI {
     mapping(address => bool) public instituteContracts; // Institute => Validity
 
     //Events
-    event IssuerAdded(address issuer, uint256 timestamp);
-    event IssuerRemoved(address issuer, uint256 timestamp);
+    event IssuerAdded(address issuer, uint256 timestamp); //this event should be removed
+    event IssuerRemoved(address issuer, uint256 timestamp);//this event should be removed
+
     event InstituteCreated(
         address indexed issuer,
         address indexed instituteOwner,
@@ -51,7 +52,7 @@ contract CertifAI {
 
     function updateValidationFee(uint256 newVal) external onlySuperAdmin {
         // Amount must be in wei
-
+        //make a update on next contract deployment-> validation fee must be greater than 0.001eth
         validationFee = newVal;
     }
 
