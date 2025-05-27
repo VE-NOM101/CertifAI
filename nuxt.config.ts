@@ -39,7 +39,11 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    //server-side
+    MONGODB_URI: "mongodb://localhost:27017",
+    MONGODB_DB: "certifai",
     public: {
+      //client-side
       certifaiContract: "0xcfac5906c751f0fc225e694d00e2ddaa9ff7b88c",
       alchemyRpcUrl:
         "https://eth-sepolia.g.alchemy.com/v2/ka0MpSVo4zW7oGO6L31z3",

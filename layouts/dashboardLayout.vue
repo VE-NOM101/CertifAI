@@ -122,6 +122,12 @@ const items = computed<NavigationMenuItem[]>(() => [
         to: '/dashboard/req-institute',
       },
       {
+        label: 'Request Inbox',
+        icon: 'i-clarity-inbox-line',
+        description: 'See all the requested institute information',
+        to: '/dashboard/request-inbox',
+      },
+      {
         label: 'My Institutes',
         icon: 'i-material-symbols-folder-managed-sharp',
         description: 'Manage your institutes',

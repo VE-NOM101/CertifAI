@@ -36,20 +36,20 @@
   /* Animation */
   --animate-wiggle: wiggle 1s ease-in-out infinite;
   @keyframes wiggle {
-  0%, 100% {
-    transform: rotate(-3deg);
+    0%,
+    100% {
+      transform: rotate(-3deg);
+    }
+    50% {
+      transform: rotate(3deg);
+    }
   }
-  50% {
-    transform: rotate(3deg);
-  }
-}
-
-
-
 }
 :root {
   --goldShadow: 0 4px 14px rgba(255, 200, 0, 0.5);
   --cyanShadow: 0 4px 14px rgba(94, 206, 220, 0.5);
+  --darkShadow: 0 0 4px #333333c0;
+  --lightShadow: 0 0 4px #c1bfbfb5;
 
   --goldTextShadow: 0 0 8px #ffd700;
   --redTextShadow: 0 0 8px #af0102;

@@ -67,7 +67,8 @@
 <script setup>
 import { ref, reactive, watch } from 'vue'
 import Joi from 'joi'
-
+const user = useUser();
+const toast = useToast();
 const typeOptions = [
     { label: 'Educational', value: 'educational' },
     { label: 'Commercial', value: 'commercial' },
@@ -88,6 +89,18 @@ const state = reactive({
     description: '',
     logo: null
 })
+function resetForm() {
+    state.name = '';
+    state.code = '';
+    state.type = 'others';
+    state.acronym = '';
+    state.location = '';
+    state.website = '';
+    state.wikipedia = '';
+    state.description = '';
+    state.logo = null;
+}
+
 
 // Sync selectedType -> state.type
 watch(selectedType, (val) => {
@@ -134,15 +147,56 @@ function handleFileUpload(e) {
 }
 
 // Form submit
-function submitForm() {
-    console.log('Form Validated & Submitted:', state)
+async function submitForm() {
+    try {
+        // Validate the form data using Joi
+        const { error } = schema.validate(state, { abortEarly: false });
 
-    const formData = new FormData()
-    for (const key in state) {
-        formData.append(key, state[key])
+        if (error) {
+            const errors = error.details.map((err) => err.message);
+            console.error('Validation Errors:', errors);
+            alert(errors.join('\n')); // Or show errors in UI
+            return;
+        }
+
+        // Build FormData for file upload
+        const formData = new FormData();
+        for (const key in state) {
+            formData.append(key, state[key] ?? '');
+        }
+
+        //appending owner of the institute
+        formData.append('owner', user.userAddress);
+
+        // Submit to backend
+        const data = await $fetch('/api/request-institute', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (data.success) {
+            toast.add({
+                title: 'Success',
+                description: data.message,
+                color: 'success',
+                icon: 'i-mdi-success',
+            })
+            resetForm();
+        } else {
+            toast.add({
+                title: 'Error',
+                description: data.message,
+                color: 'error',
+                icon: 'i-material-symbols-error',
+            })
+        }
+
+    } catch (err) {
+        console.error('Submission failed:', err);
+        alert('Failed to submit institute request.');
     }
-
-    // You can send formData using fetch or axios
-    // fetch('/api/institutes', { method: 'POST', body: formData })
 }
+
+
+
 </script>
